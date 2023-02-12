@@ -4,10 +4,13 @@
 #
 import os
 import sys
+import glob
 import argparse
 import logging
 from datetime import datetime
 #
+from pycaret.classification import load_model, predict_model
+import pandas as pd
 from flask import Flask, request, url_for, redirect, render_template, jsonify
 #
 from model import WineQualityDataset
@@ -16,6 +19,7 @@ OPT_VERBOSE_HELP = "Display additional information about execution."
 #
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+current_model = None
 #
 @app.route('/')
 def home():
@@ -39,22 +43,50 @@ def process():
     alcohol = float(request.form['alcohol'])
 
     logger.info(f"Received request with the following data items: ")
-    logger.info(f"\tfixed_acidity                    : {fixed_acidity}")
-    logger.info(f"\tvolatile_acidity                 : {volatile_acidity}")
-    logger.info(f"\tcitric_acid                      : {citric_acid}")
-    logger.info(f"\tresidual_sugar                   : {residual_sugar}")
-    logger.info(f"\tchlorides                        : {chlorides}")
-    logger.info(f"\tfree_sulfur_dioxide              : {free_sulfur_dioxide}")
-    logger.info(f"\ttotal_sulfur_dioxide             : {total_sulfur_dioxide}")
-    logger.info(f"\tdensity                          : {density}")
-    logger.info(f"\tpH                               : {ph}")
-    logger.info(f"\tsulphates                        : {sulphates}")
-    logger.info(f"\talcohol                          : {alcohol}")
+    logger.info(f"\t fixed_acidity                    : {fixed_acidity}")
+    logger.info(f"\t volatile_acidity                 : {volatile_acidity}")
+    logger.info(f"\t citric_acid                      : {citric_acid}")
+    logger.info(f"\t residual_sugar                   : {residual_sugar}")
+    logger.info(f"\t chlorides                        : {chlorides}")
+    logger.info(f"\t free_sulfur_dioxide              : {free_sulfur_dioxide}")
+    logger.info(f"\t total_sulfur_dioxide             : {total_sulfur_dioxide}")
+    logger.info(f"\t density                          : {density}")
+    logger.info(f"\t pH                               : {ph}")
+    logger.info(f"\t sulphates                        : {sulphates}")
+    logger.info(f"\t alcohol                          : {alcohol}")
 
     # Perform guessing here
     quality = 0.0
-    return render_template("result.html", quality=quality)
+    label = None
+    global current_model
+    if current_model is not None:
+        # Create a sample dataset for prediction
+        data = pd.DataFrame({
+            'fixed acidity': [fixed_acidity],
+            'volatile acidity': [volatile_acidity],
+            'citric acid': [citric_acid],
+            'residual sugar': [residual_sugar],
+            'chlorides': [chlorides],
+            'free sulfur dioxide': [free_sulfur_dioxide],
+            'total sulfur dioxide': [total_sulfur_dioxide],
+            'density': [density],
+            'pH': [ph],
+            'sulphates': [sulphates],
+            'alcohol': [alcohol]
+        })
+        predictions = predict_model(current_model, data=data)
+        logger.info(predictions)
+        score = predictions['prediction_score'].iloc[0]
+        label = predictions['prediction_label'].iloc[0]
+        logger.info(f"Predicted quality: {label} ({score}).")
+    else:
+        logger.error(f"No model defined.")
 
+    return render_template("result.html", score=score, label=label)
+
+def get_newest_file(path):
+    files = glob.glob(os.path.join(path, '*.pkl'))
+    return max(files, key=os.path.getctime)
 
 def main(argv):
     parser = argparse.ArgumentParser(
@@ -69,6 +101,10 @@ def main(argv):
     parser.add_argument('-p', '--port',
                     dest="port",
                     default=5000,
+                    help="Port to listen on for HTTP requests.")
+    parser.add_argument('-m', '--model',
+                    dest="model",
+                    required=False,
                     help="Port to listen on for HTTP requests.")
     parser.add_argument('-v', '--verbose',
                         default=False,
@@ -85,7 +121,7 @@ def main(argv):
     # Train a new model
     if args.do_train:
         # Load the data
-        datafile = os.path.abspath('./data/winquality-red.csv')
+        datafile = os.path.abspath('./data/winequality-red.csv')
         dataset = WineQualityDataset(_file=datafile, _target_col="quality")
         logger.info(f"{dataset.nb_rows} row(s) loaded from '{datafile}'.")
         # Generate the model
@@ -103,8 +139,12 @@ def main(argv):
     # Otherwise, start the server
     else:
         # Load the latest model
-        # TODO: Select the most recent model, or the model specified
-        # TODO: Load the model
+        model_file = get_newest_file(os.path.join(os.getcwd(), "models"))
+        logger.info(f"Selected '{model_file}' as model.")
+        # For some reason, `load_model` appends `.pkl` to the file, so 
+        # we need to remove it.
+        global current_model
+        current_model = load_model(model_file.split('.', maxsplit=1)[0])
         # Start the server
         app.run(port=int(args.port), debug=bool(args.is_debug), threaded=True)
 

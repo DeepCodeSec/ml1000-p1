@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 import logging
-
+import numpy as np
 import pandas as pd
 from pycaret.classification import *
 #
@@ -31,13 +31,18 @@ class WineQualityDataset(object):
 
     def __init__(self, _file:str, _target_col:str, _training_size=0.8, _drop_cols=[]) -> None:
         self._datafile = _file
-        self._df = pd.read_csv(_file)
-        self._df.reset_index()
+        self._df = pd.read_csv(_file, sep=';')
 
         # Remove unneeded columns
-        if len(_drop_cols) > 0:
-            logger.info(f"Removing {len(_drop_cols)} column(s) from the original data set.")
-            self._df = self._df.drop(_drop_cols)
+        #if len(_drop_cols) > 0:
+        #    logger.info(f"Removing {len(_drop_cols)} column(s) from the original data set.")
+        #    self._df = self._df.drop(_drop_cols)
+
+        #add binary classification label
+        self._df["new_quality"] = np.where(self._df["quality"] > 6, "high_quality", "standard")
+        self._df = self._df.drop(columns=["quality"])
+        self._df = self._df.rename(columns={'new_quality':'quality'})
+        self._df.reset_index()
 
         # Create the classifier
         # Pass the complete dataset as data and the featured to be predicted as target
