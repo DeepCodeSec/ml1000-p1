@@ -82,7 +82,10 @@ def process():
     else:
         logger.error(f"No model defined.")
 
-    return render_template("result.html", score=score, label=label)
+    return jsonify({
+        "label": label,
+        "score": score
+    })
 
 def get_newest_file(path):
     files = glob.glob(os.path.join(path, '*.pkl'))
