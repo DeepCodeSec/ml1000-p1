@@ -10,7 +10,7 @@ from datetime import datetime
 #
 from flask import Flask, request, url_for, redirect, render_template, jsonify
 #
-from model import HotelReservationDataset
+from model import WineQualityDataset
 #
 OPT_VERBOSE_HELP = "Display additional information about execution."
 #

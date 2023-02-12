@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hotel Reservation Form</title>
+<title>Wine Quality Assessment Form</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view.css') }}" media="all">
 <script type="text/javascript" src="{{ url_for('static', filename='js/view.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/calendar.js') }}"></script>
@@ -71,7 +71,7 @@
 		</li>
 
 		<li id="li_9" >
-			<label class="description" for="element_2">density</label>
+			<label class="description" for="element_2">Density</label>
 			<div>
 				<input id="element_2" name="density" class="element text small" type="text" maxlength="255" value=""/> 
 			</div><p class="guidelines" id="guide_2"><small>density</small></p> 
@@ -80,12 +80,12 @@
 		<li id="li_10" >
 			<label class="description" for="element_2">pH</label>
 			<div>
-				<input id="element_2" name="density" class="element text small" type="text" maxlength="255" value=""/> 
+				<input id="element_2" name="pH" class="element text small" type="text" maxlength="255" value=""/> 
 			</div><p class="guidelines" id="guide_2"><small>pH</small></p> 
 		</li>
 
 		<li id="li_11" >
-			<label class="description" for="element_2">sulphates</label>
+			<label class="description" for="element_2">Sulphates</label>
 			<div>
 				<input id="element_2" name="sulphates" class="element text small" type="text" maxlength="255" value=""/> 
 			</div><p class="guidelines" id="guide_2"><small>sulphates</small></p> 
@@ -97,7 +97,9 @@
 				<input id="element_2" name="alcohol" class="element text small" type="text" maxlength="255" value=""/> 
 			</div><p class="guidelines" id="guide_2"><small>alcohol</small></p> 
 		</li>
-
+		<li class="buttons">
+			<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+		</li>
 		</ul>
 		</form>	
 	</div>
