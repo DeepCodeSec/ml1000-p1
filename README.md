@@ -35,3 +35,4 @@ Available at [https://ml1000-p1.herokuapp.com/](https://ml1000-p1.herokuapp.com/
 ## References
 
 * [pycaret](https://pycaret.gitbook.io/docs/)
+* [Wine Quality Data Set](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)

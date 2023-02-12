@@ -25,56 +25,35 @@ def home():
 def process():
     # Extract the data from the form
     logger.debug(request.form)
-    # Number of adults
-    no_of_adults = int(request.form['no_of_adults'])
-    # Number of children
-    no_of_children = int(request.form['no_of_children'])
-    check_in_date_t = (
-        int(request.form["check_in_year"]),
-        int(request.form["check_in_month"]),
-        int(request.form["check_in_day"]))
-    check_out_date_t = (
-        int(request.form["check_out_year"]),
-        int(request.form["check_out_month"]),
-        int(request.form["check_out_day"]))
-    type_of_meal_plan = request.form['type_of_meal_plan']
-    required_car_parking_space = request.form['required_car_parking_space']
-    room_type_reserved = int(request.form['room_type_reserved'])
-
-    check_in_dt = datetime(check_in_date_t[0], check_in_date_t[1], check_in_date_t[2])
-    check_out_dt = datetime(check_out_date_t[0], check_out_date_t[1], check_out_date_t[2])
-
-    check_in_s = check_in_dt.strftime("%Y-%m-%d")
-    check_out_s = check_out_dt.strftime("%Y-%m-%d")
-
-    # TODO: no_of_week_nights
-    # TODO: no_of_weekend_nights
-    # TODO: lead_time
-    market_segment_type = request.form['market_segment_type']
-    repeated_guest = int(request.form['repeated_guest'])
-    no_of_previous_cancellations = int(request.form['no_of_previous_cancellations'])
-    no_of_previous_bookings_not_canceled = int(request.form['no_of_previous_bookings_not_canceled'])
-    avg_price_per_room = float(request.form['avg_price_per_room'])
-    no_of_special_requests = int(request.form['no_of_special_requests'])
-    booking_status = request.form['booking_status']
-
+    #
+    fixed_acidity = float(request.form['fixed_acidity'])
+    volatile_acidity = float(request.form['volatile_acidity'])
+    citric_acid = float(request.form['citric_acid'])
+    residual_sugar = float(request.form['residual_sugar'])
+    chlorides = float(request.form['chlorides'])
+    free_sulfur_dioxide = float(request.form['free_sulfur_dioxide'])
+    total_sulfur_dioxide = float(request.form['total_sulfur_dioxide'])
+    density = float(request.form['density'])
+    ph = float(request.form['pH'])
+    sulphates = float(request.form['sulphates'])
+    alcohol = float(request.form['alcohol'])
 
     logger.info(f"Received request with the following data items: ")
-    logger.info(f"\tno_of_adults                    : {no_of_adults}")
-    logger.info(f"\tno_of_children                  : {no_of_children}")
-    logger.info(f"\tcheck_in_dt                     : {check_in_s}")
-    logger.info(f"\tcheck_out_dt                    : {check_out_s}")
-    logger.info(f"\trequired_car_parking_space      : {required_car_parking_space}")
-    logger.info(f"\troom_type_reserved              : {room_type_reserved}")
-    logger.info(f"\tmarket_segment_type             : {market_segment_type}")
-    logger.info(f"\trepeated_guest                  : {repeated_guest}")
-    logger.info(f"\tno_of_previous_cancellations    : {no_of_previous_cancellations}")
-    logger.info(f"\tno_of_previous_bookings_not_canceled     : {no_of_previous_bookings_not_canceled}")
-    logger.info(f"\tavg_price_per_room                       : {avg_price_per_room}")
-    logger.info(f"\tno_of_special_requests                   : {no_of_special_requests}")
-    logger.info(f"\tbooking_status                  : {booking_status}")
+    logger.info(f"\tfixed_acidity                    : {fixed_acidity}")
+    logger.info(f"\tvolatile_acidity                 : {volatile_acidity}")
+    logger.info(f"\tcitric_acid                      : {citric_acid}")
+    logger.info(f"\tresidual_sugar                   : {residual_sugar}")
+    logger.info(f"\tchlorides                        : {chlorides}")
+    logger.info(f"\tfree_sulfur_dioxide              : {free_sulfur_dioxide}")
+    logger.info(f"\ttotal_sulfur_dioxide             : {total_sulfur_dioxide}")
+    logger.info(f"\tdensity                          : {density}")
+    logger.info(f"\tpH                               : {ph}")
+    logger.info(f"\tsulphates                        : {sulphates}")
+    logger.info(f"\talcohol                          : {alcohol}")
 
-    return render_template("result.html")
+    # Perform guessing here
+    quality = 0.0
+    return render_template("result.html", quality=quality)
 
 
 def main(argv):
@@ -106,8 +85,8 @@ def main(argv):
     # Train a new model
     if args.do_train:
         # Load the data
-        datafile = os.path.abspath('./data/data.csv')
-        dataset = HotelReservationDataset(_file=datafile, _target_col="booking_status")
+        datafile = os.path.abspath('./data/winquality-red.csv')
+        dataset = WineQualityDataset(_file=datafile, _target_col="quality")
         logger.info(f"{dataset.nb_rows} row(s) loaded from '{datafile}'.")
         # Generate the model
         logger.info("Selecting best classifier model...")
