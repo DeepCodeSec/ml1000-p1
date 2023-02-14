@@ -1,155 +1,237 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Wine Quality Assessment Form</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view.css') }}" media="all">
-<script type="text/javascript" src="{{ url_for('static', filename='js/view.js') }}"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-</head>
-<body id="main_body" >
-	
-	<img id="top" src="{{ url_for('static', filename='img/top.png') }}" alt="">
-	<div id="form_container">
-	
-		<h1><a>Wine Quality Assessment Form</a></h1>
-		<form id="form_45045" class="appnitro"  method="post" action="/process">
-					<div class="form_description">
-			<h2>Wine Quality Assessment Form</h2>
-			<p>Provide details about the wine.</p>
-		</div>						
-		<ul >
-			
-		<li id="li_1" >
-			<label class="description" for="element_1">Fixed Acidity</label>
-			<div>
-				<input id="element_1" name="fixed_acidity" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_1"><small>Fixed Acidity</small></p> 
-		</li>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wine Quality Classifier</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <style>
+      html, body {
+        min-height: 100%;
+      }
+      body, div, form, input, select, p { 
+        padding: 0;
+        margin: 0;
+        outline: none;
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 14px;
+        color: #666;
+        line-height: 22px;
+      }
+      h1 {
+        position: absolute;
+        margin: 0;
+        font-size: 36px;
+        color: #fff;
+        z-index: 2;
+      }
+      span.required {
+        color: red;
+      }
+      .testbox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: inherit;
+        padding: 20px;
+      }
+      form {
+        width: 100%;
+        padding: 20px;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 0 30px 0 #095484; 
+      }
+      .banner {
+        position: relative;
+        height: 180px;
+        background-image: url("{{url_for('static', filename='img/wines.jpg')}}");  
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .banner::after {
+        content: "";
+        background-color: rgba(0, 0, 0, 0.4); 
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      p.top-info {
+        margin: 10px 0;
+      }
+      input, select {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      input {
+        width: calc(100% - 10px);
+        padding: 5px;
+      }
+      select {
+        width: 100%;
+        padding: 7px 0;
+        background: transparent;
+      }
+      .item:hover p, .question:hover p, .question label:hover, input:hover::placeholder {
+        color: #095484;
+      }
+      .item input:hover, .item select:hover {
+        border: 1px solid transparent;
+        box-shadow: 0 0 5px 0 #095484;
+        color: #095484;
+      }
+      .item {
+        position: relative;
+        margin: 10px 0;
+      }
+      .question input {
+        width: auto;
+        margin: 0;
+        border-radius: 50%;
+      }
+      .question input, .question span {
+        vertical-align: middle;
+      }
+      .question label {
+        display: inline-block;
+        margin: 5px 20px 15px 0;
+      }
+      .btn-block {
+        margin-top: 10px;
+        text-align: center;
+      }
+      button {
+        width: 150px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px; 
+        background: #095484;
+        font-size: 16px;
+        color: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0666a3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testbox">
+      
+      <!-- Form to enter new data for classification  -->
+      <form id="form_45045" method="post" action="/process">
+        <div class="banner">
+          <h1>Wine Quality Classifier</h1>
+        </div>
+        <p class="top-info">Please enter all required Physicochemical Tests fields then press Classify Wine. The wine will be classified as either High Quality or Standard.</p>
 
-		<li id="li_2" >
-			<label class="description" for="element_2">Volatile Acidity</label>
-			<div>
-				<input id="element_2" name="volatile_acidity" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>Volatile Acidity</small></p> 
-		</li>		
-		
-		<li id="li_3" >
-			<label class="description" for="element_2">Citric Acid</label>
-			<div>
-				<input id="element_2" name="citric_acid" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>Citric Acid</small></p> 
-		</li>
-		
-		<li id="li_4" >
-			<label class="description" for="element_2">residual sugar</label>
-			<div>
-				<input id="element_2" name="residual_sugar" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>residual sugar</small></p> 
-		</li>
-<!-- "fixed acidity";"volatile acidity";"citric acid";"residual sugar";"chlorides";"free sulfur dioxide";"total sulfur dioxide";"density";"pH";"sulphates";"alcohol";"quality" -->
-		
-		<li id="li_6" >
-			<label class="description" for="element_2">chlorides</label>
-			<div>
-				<input id="element_2" name="chlorides" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>chlorides</small></p> 
-		</li>
-		
-		<li id="li_7" >
-			<label class="description" for="element_2">free sulfur dioxide</label>
-			<div>
-				<input id="element_2" name="free_sulfur_dioxide" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>free sulfur dioxide</small></p> 
-		</li>
 
-		<li id="li_8" >
-			<label class="description" for="element_2">total sulfur dioxide</label>
-			<div>
-				<input id="element_2" name="total_sulfur_dioxide" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>total sulfur dioxide</small></p> 
-		</li>
+        <div class="item">
+          <p>Fixed Acidity<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="100" name="fixed_acidity" placeholder="tartaric acid concentration" maxlength=6 pattern="\d*" required />
+        </div>
 
-		<li id="li_9" >
-			<label class="description" for="element_2">Density</label>
-			<div>
-				<input id="element_2" name="density" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>density</small></p> 
-		</li>
-		
-		<li id="li_10" >
-			<label class="description" for="element_2">pH</label>
-			<div>
-				<input id="element_2" name="pH" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>pH</small></p> 
-		</li>
+        <div class="item">
+          <p>Volatile Acidity<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="10" name="volatile_acidity" placeholder="acetic acid concentration" maxlength=6 required />
+        </div>
 
-		<li id="li_11" >
-			<label class="description" for="element_2">Sulphates</label>
-			<div>
-				<input id="element_2" name="sulphates" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>sulphates</small></p> 
-		</li>
+        <div class="item">
+          <p>Citric Acid<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="10" name="citric_acid" placeholder="citric acid concentration" maxlength=6 required />
+        </div>
 
-		<li id="li_12" >
-			<label class="description" for="element_2">alcohol</label>
-			<div>
-				<input id="element_2" name="alcohol" class="element text small" type="text" maxlength="255" value=""/> 
-			</div><p class="guidelines" id="guide_2"><small>alcohol</small></p> 
-		</li>
-		<li class="buttons">
-			<div id="spinner-div" class="pt-5">
-				<div class="spinner-border text-primary" role="status">
-				</div>
-			  </div>
-			  <div class="container">
-				<div class="row mt-2">
-				  <div class="col-12">
-					<div class="card shadow">
-					  <div class="card-body">
-						<div class="row">
-						  <div class="col-6">
-							<button type="button" class="btn btn-success my-2" id="do-call">Submit</button>
-							<!--
-								<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
-							-->
-						  </div>
-						  <div class="col-6 mt-2">
-							<p id="message_string">The message is:</p>
-						  </div>
-						</div>
-					  </div>
-					</div>
-				  </div>
-				</div>
-			  </div>
+        <div class="item">
+          <p>Residual sugar<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="100" name="residual_sugar" placeholder="citric acid concentration" maxlength=6 required />
+        </div>
 
-		</li>
-		</ul>
-		
-		</form>	
-	</div>
-	<img id="bottom" src="{{ url_for('static', filename='img/bottom.png') }}" alt="">
-	</body>
+
+        <div class="item">
+          <p>Chlorides<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="10" name="chlorides"placeholder="sodium chloride concentration" maxlength=8 required/>
+        </div>
+
+        <div class="item">
+          <p>Free Sulfur Dioxide<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="500" name="free_sulfur_dioxide" placeholder="free sulfur dioxide concentration" maxlength=6 required />
+        </div>
+
+        <div class="item">
+          <p>Total Sulfur Dioxide<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="500" name="total_sulfur_dioxide" placeholder=" total sulfur dioxide concentration" maxlength=6 required />
+        </div>
+
+        <div class="item">
+          <p>Density<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="10" name="density" placeholder="density" maxlength=8 required />
+        </div>
+
+        <div class="item">
+          <p>pH<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="14" name="pH" placeholder="pH level (range: 0 - 14)" maxlength=6 required />
+        </div>
+
+        <div class="item">
+          <p>Sulphates<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="10" name="sulphates" placeholder="potassium sulphate concentration" maxlength=6 required />
+        </div>
+
+        <div class="item">
+          <p>Alcohol<span class="required">*</span></p>
+          <input type="number" step="any" min="0" max="100" name="alcohol" placeholder="alcohol (% vol)" maxlength=6 required />
+        </div>
+        <div id="spinner-div" class="pt-5">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+        <div class="container">
+          <div class="row mt-2">
+            <div class="col-12">
+            <div class="card shadow">
+              <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <button type="button" class="btn btn-success" id="do-call">Classify Wine</button>
+                </div>
+                <div class="col-6">
+                  <p id="message_string"></p>
+                </div>
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          </div>
+      </form>
+    </div>
+
+    <!-- {{classify}} -->
+  </body>
 	<script type="text/javascript">
 		$(document).ready(function () {
-		  $("#do-call").click(function () {//The load button
-			$("#spinner-div").show(); //Load button clicked show spinner
-			var formData = $('#form_45045').serialize();
-			console.log(formData)
-			$.ajax({
-			  url: "/process", //Takes 2 seconds to complete this request
-			  type: "POST",
-			  data: formData,
-			 // dataType: "json",
-			  success: function (res) {
-				$("#message_string").text(res.label); //Write the message
-			  },
-			  complete: function () {
-				$("#spinner-div").hide(); //Request is complete so hide spinner
-			  }
-			});
+
+        $("#do-call").click(function () {//The load button
+          $("#spinner-div").show(); //Load button clicked show spinner
+          var formData = $('#form_45045').serialize();
+
+          console.log(formData)
+
+          $.ajax({
+            url: "/process", //Takes 2 seconds to complete this request
+            type: "POST",
+            data: formData,
+          // dataType: "json",
+            success: function (res) {
+              console.log(res);
+              $("#message_string").text(res.label); //Write the message
+            },
+            complete: function () {
+              $("#spinner-div").hide(); //Request is complete so hide spinner
+            }
+        });
 		  });
 		});
 	</script>
