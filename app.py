@@ -56,7 +56,7 @@ def process():
     logger.info(f"\t alcohol                          : {alcohol}")
 
     # Perform guessing here
-    quality = 0.0
+    score = 0.0
     label = None
     global current_model
     if current_model is not None:
