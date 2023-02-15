@@ -11,7 +11,7 @@ from datetime import datetime
 #
 from pycaret.classification import load_model, predict_model
 import pandas as pd
-from flask import Flask, request, url_for, redirect, render_template, jsonify
+from flask import Flask, request, render_template, jsonify
 #
 from model import WineQualityDataset
 #
@@ -19,25 +19,28 @@ OPT_VERBOSE_HELP = "Display additional information about execution."
 #
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-current_model = None
 
-@app.before_first_request
-def initialize():
-    # Load the latest model
+def get_newest_file(path):
+    files = glob.glob(os.path.join(path, '*.pkl'))
+    return max(files, key=os.path.getctime)
+
+# Check if were are currently running on Heroku
+if 'DYNO' in os.environ:
+    # if so load the model on execution
     model_file = get_newest_file(os.path.join(os.getcwd(), "models"))
-    logger.info(f"Selected '{model_file}' as model.")
-    # For some reason, `load_model` appends `.pkl` to the file, so 
-    # we need to remove it.
-    global current_model
+    logger.debug(f"Latest model: {model_file}")
     current_model = load_model(model_file.split('.', maxsplit=1)[0])
-#
+else: # Otherwise let the user decide how to load the model.
+    current_model = None
 
 @app.route('/')
 def home():
+    """ Shows the home page using the 'templates/home.html' page """
     return render_template("home.html")
 
 @app.route('/process', methods=['POST'])
 def process():
+    """ Endpoint processing the data to predict the quality. """
     # Extract the data from the form
     logger.debug(request.form)
     #
@@ -97,10 +100,6 @@ def process():
         "label": label,
         "score": score
     })
-
-def get_newest_file(path):
-    files = glob.glob(os.path.join(path, '*.pkl'))
-    return max(files, key=os.path.getctime)
 
 def main(argv):
     parser = argparse.ArgumentParser(
