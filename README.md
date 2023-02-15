@@ -27,10 +27,8 @@ Available at [https://ml1000-p1.herokuapp.com/](https://ml1000-p1.herokuapp.com/
 
 ## TODO
 
-* When not in training mode, load the most recent model if there is any.
-* Readjust the business problem
 * Adjust the data to optimize the model
-* Implement process/predict endpoint
+* Integrate latest model into training process
 
 ## References
 

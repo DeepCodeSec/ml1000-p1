@@ -5,6 +5,7 @@
 import os
 import sys
 import glob
+import pickle
 import argparse
 import logging
 from datetime import datetime
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 def get_newest_file(path):
+    """ Selects the most recent file created from the `models` directory. """
     files = glob.glob(os.path.join(path, '*.pkl'))
     return max(files, key=os.path.getctime)
 
