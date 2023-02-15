@@ -92,8 +92,8 @@ def process():
         })
         predictions = predict_model(current_model, data=data)
         logger.info(predictions)
-        score = predictions['prediction_score'].iloc[0]
-        label = predictions['prediction_label'].iloc[0]
+        score = predictions['Score'].iloc[0]
+        label = predictions['Label'].iloc[0]
         logger.info(f"Predicted quality: {label} ({score}).")
     else:
         logger.error(f"No model defined.")
