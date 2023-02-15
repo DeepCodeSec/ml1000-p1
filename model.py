@@ -50,6 +50,7 @@ class WineQualityDataset(object):
 
         # https://pycaret.gitbook.io/docs/get-started/functions/train#compare_models
         self._best_model = compare_models()
+        logger.info(self._best_model)
 
     @property
     def filename(self) -> str:
