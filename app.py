@@ -135,7 +135,7 @@ def main(argv):
     # Train a new model
     if args.do_train:
         # Load the data
-        datafile = os.path.abspath('./data/winequality-red.csv')
+        datafile = os.path.abspath('./data/winequality-white.csv')
         dataset = WineQualityDataset(_file=datafile, _target_col="quality")
         logger.info(f"{dataset.nb_rows} row(s) loaded from '{datafile}'.")
         # Generate the model
