@@ -20,7 +20,18 @@ OPT_VERBOSE_HELP = "Display additional information about execution."
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 current_model = None
+
+@app.before_first_request
+def initialize():
+    # Load the latest model
+    model_file = get_newest_file(os.path.join(os.getcwd(), "models"))
+    logger.info(f"Selected '{model_file}' as model.")
+    # For some reason, `load_model` appends `.pkl` to the file, so 
+    # we need to remove it.
+    global current_model
+    current_model = load_model(model_file.split('.', maxsplit=1)[0])
 #
+
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -108,7 +119,7 @@ def main(argv):
     parser.add_argument('-m', '--model',
                     dest="model",
                     required=False,
-                    help="Port to listen on for HTTP requests.")
+                    help="Model file to use.")
     parser.add_argument('-v', '--verbose',
                         default=False,
                         action="store_true",
