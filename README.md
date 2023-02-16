@@ -39,7 +39,7 @@ You can then use a browser and access the main website via `http://127.0.0.1:500
 
 ## Portal
 
-Available at [https://ml1000-p1.herokuapp.com/](https://ml1000-p1.herokuapp.com/)
+Available at [https://wineplus.herokuapp.com/](https://wineplus.herokuapp.com/)
 
 ## TODO
 
