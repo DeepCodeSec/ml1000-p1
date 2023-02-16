@@ -94,6 +94,11 @@ def process():
         logger.info(predictions)
         score = predictions['Score'].iloc[0]
         label = predictions['Label'].iloc[0]
+        if label == 0:
+            label = "High Quality"
+        else:
+            label = "Standard"
+
         logger.info(f"Predicted quality: {label} ({score}).")
     else:
         logger.error(f"No model defined.")
