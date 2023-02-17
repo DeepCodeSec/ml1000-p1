@@ -134,7 +134,7 @@ def main(argv):
 
     logging.basicConfig(level=logging.DEBUG)
 
-    # Parse command-line arguents
+    # Parse command-line arguments
     args = parser.parse_args(args=argv[1:])
     print("")
 
